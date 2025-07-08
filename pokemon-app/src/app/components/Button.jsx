@@ -1,11 +1,23 @@
-import React from "react";
+'use client';
+import React, { useState } from "react";
 
-const Button = () => {
-  const handleSearchPokemon = () => {
-    console.log("search");
+const Button = ({searchValue, pokemonList, setPokemonList}) => {
+  // console.log(searchValue);
+  
+  const handleSearchPokemon = async () => {
+    if (!searchValue) return;
+    try {
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchValue.toLowerCase()}`);
+      if (!res.ok) throw new Error("Pokemon not found");
+      const data = await res.json();
+      setPokemonList([data]);
+    } catch (err) {
+      console.error("Error fetching Pokémon:", err.message);
+    }
   };
+  
   return (
-    <button onClick={() => handleSearchPokemon()}>
+    <button onClick={() => handleSearchPokemon()} className="text-black">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
